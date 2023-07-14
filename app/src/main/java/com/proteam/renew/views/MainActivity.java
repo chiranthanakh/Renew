@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId())
         {
             case R.id.ll_add_newWorker:
-                Intent intent= new Intent(MainActivity.this, WorkerInformationActivity.class);
+                Intent intent= new Intent(MainActivity.this, WorkerListActivity.class);
                 startActivity(intent);
                 break;
             case R.id.ll_id_scan:

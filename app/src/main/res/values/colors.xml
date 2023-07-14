@@ -5,6 +5,8 @@
 
     <color name="demo_state_foreground_color">#0d6e42</color>
     <color name="demo_state_second">#7ab629</color>
+    <color name="demo_state_third">#33a873</color>
+    <color name="demo_state_fourth">#48966c</color>
 
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>

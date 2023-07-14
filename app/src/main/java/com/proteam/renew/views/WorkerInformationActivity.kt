@@ -11,14 +11,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.TransitionBuilder.validate
 import com.proteam.renew.R
-import com.proteam.renew.requestModels.Loginmodel
 import com.proteam.renew.responseModel.LocationResponse
-import com.proteam.renew.responseModel.LoginResponse
-import com.proteam.renew.responseModel.StatesResponsce
 import com.proteam.renew.responseModel.statesResponse
-import com.proteam.renew.responseModel.statesResponseItem
 import com.proteam.renew.utilitys.OnResponseListener
 import com.proteam.renew.utilitys.WebServices
 
@@ -29,7 +24,7 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
     val edt_dob: EditText by lazy { findViewById<EditText>(R.id.edt_dob) }
     val sp_gender: AutoCompleteTextView by lazy { findViewById<AutoCompleteTextView>(R.id.sp_gender) }
     val edt_phone_number: EditText by lazy { findViewById<EditText>(R.id.edt_phone_number) }
-    val edt_emergency_number: EditText by lazy { findViewById<EditText>(R.id.edt_emergency_number) }
+    val edt_emergency_contact_Name: EditText by lazy { findViewById<EditText>(R.id.edt_emergency_contact_Name) }
     val nationality: EditText by lazy { findViewById<EditText>(R.id.nationality) }
     val sp_blood_group: AutoCompleteTextView by lazy { findViewById<AutoCompleteTextView>(R.id.sp_blood_group) }
     val edt_address: EditText by lazy { findViewById<EditText>(R.id.edt_address) }
@@ -37,6 +32,10 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
     val sp_location: AutoCompleteTextView by lazy { findViewById<AutoCompleteTextView>(R.id.sp_location) }
     val edt_pincode: EditText by lazy { findViewById<EditText>(R.id.edt_pincode) }
     val tv_next_one: TextView by lazy { findViewById<TextView>(R.id.tv_next_one) }
+
+    //TODO Missed this one
+
+    val edt_emergency_contactNumber: EditText by lazy { findViewById<EditText>(R.id.edt_emergency_contactNumber) }
 
     var progressDialog: ProgressDialog? = null
     var stateList = ArrayList<String>()
@@ -56,6 +55,7 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
     val State = "state"
     val Location = "location"
     val Pincode = "pincode"
+    val emergency_contactNumber = "edt_emergency_contactNumber"
     var userid: String? = ""
     var rollid: String? = ""
 
@@ -117,13 +117,14 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
         val edt_dob: String = edt_dob.text.toString()
         val sp_gender: String = sp_gender.text.toString()
         val edt_phone_number: String = edt_phone_number.text.toString()
-        val edt_emergency_number: String = edt_emergency_number.text.toString()
+        val edt_emergency_contact_Name: String = edt_emergency_contact_Name.text.toString()
         val nationality: String = nationality.text.toString()
         val sp_blood_group: String = sp_blood_group.text.toString()
         val edt_address: String = edt_address.text.toString()
         val sp_state: String = sp_state.text.toString()
         val sp_location: String = sp_location.text.toString()
         val edt_pincode: String = edt_pincode.text.toString()
+        val edt_emergency_contactNumber: String = edt_emergency_contactNumber.text.toString()
 
         val sharedPreferences: SharedPreferences =getSharedPreferences("WorkerInfoPref", Context.MODE_PRIVATE)!!
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -132,13 +133,14 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
         editor.putString(Dob, edt_dob)
         editor.putString(Gender, sp_gender)
         editor.putString(PhoneNumber, edt_phone_number)
-        editor.putString(emergency_number, edt_emergency_number)
+        editor.putString(emergency_number, edt_emergency_contact_Name)
         editor.putString(Nationality, nationality)
         editor.putString(Blood_group, sp_blood_group)
         editor.putString(Address, edt_address)
         editor.putString(State, sp_state)
         editor.putString(Location, sp_location)
         editor.putString(Pincode, edt_pincode)
+        editor.putString(emergency_contactNumber, edt_emergency_contactNumber)
         editor.commit()
 
         val intent = Intent(applicationContext, WorkerInformationNext1Activity::class.java)
