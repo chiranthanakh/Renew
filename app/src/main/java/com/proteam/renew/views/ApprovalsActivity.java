@@ -29,7 +29,10 @@ public class ApprovalsActivity extends AppCompatActivity implements View.OnClick
         {
             case R.id.ll_OnBoard_approval:
 
-                Intent intent= new Intent(ApprovalsActivity.this, WorkerDetailsActivity.class);
+                Intent intent= new Intent(ApprovalsActivity.this, WorkerListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("approval", true);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
 

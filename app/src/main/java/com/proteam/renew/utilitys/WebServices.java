@@ -9,6 +9,8 @@ import android.widget.Adapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.proteam.renew.Adapter.ApprovalRequest;
+import com.proteam.renew.Adapter.RejectRequest;
 import com.proteam.renew.requestModels.Loginmodel;
 import com.proteam.renew.requestModels.OnBoarding;
 import java.io.IOException;
@@ -43,7 +45,7 @@ public class WebServices<T> {
     private static OkHttpClient.Builder builder;
 
     public enum ApiType {
-       login,states,location,workers,training,skills,projects,activitys,onBoarding,contractors,supervisors
+       login,states,location,workers,training,skills,projects,activitys,onBoarding,contractors,supervisors,update,approve,reject
     }
     String BaseUrl = "https://gp.proteam.co.in/api/Workeronboard_api/";
 
@@ -354,6 +356,71 @@ public class WebServices<T> {
 
         call=(Call<T>)proRenew.onBoarding(onBording);
 
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void workerUpdate(ApiType apiTypes, OnBoarding onBording, String id)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.update(onBording, id);
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void Approve(ApiType apiTypes, ApprovalRequest approvalRequest)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+
+        call=(Call<T>)proRenew.approve(approvalRequest);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void Reject(ApiType apiTypes, RejectRequest rejectRequest)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.reject(rejectRequest);
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(Call<T> call, Response<T> response) {

@@ -1,21 +1,32 @@
 package com.proteam.renew.views
 
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.proteam.renew.R
+import android.util.Base64
 import com.proteam.renew.responseModel.LocationResponse
 import com.proteam.renew.responseModel.statesResponse
 import com.proteam.renew.utilitys.OnResponseListener
 import com.proteam.renew.utilitys.WebServices
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
 
@@ -32,16 +43,18 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
     val sp_location: AutoCompleteTextView by lazy { findViewById<AutoCompleteTextView>(R.id.sp_location) }
     val edt_pincode: EditText by lazy { findViewById<EditText>(R.id.edt_pincode) }
     val tv_next_one: TextView by lazy { findViewById<TextView>(R.id.tv_next_one) }
-
-    //TODO Missed this one
-
     val edt_emergency_contactNumber: EditText by lazy { findViewById<EditText>(R.id.edt_emergency_contactNumber) }
-
+    val iv_profile_image: ImageView by lazy { findViewById(R.id.iv_nav_image) }
     var progressDialog: ProgressDialog? = null
     var stateList = ArrayList<String>()
     var locationList = ArrayList<String>()
     var genderList = ArrayList<String>()
     var bloodgroup = ArrayList<String>()
+
+    var statemap = HashMap<String, String>()
+    var locationmap = HashMap<String, String>()
+    var statemapreverse = HashMap<String, String>()
+    var locationmapreverse = HashMap<String, String>()
 
     val Emp_Name = "employee_name"
     val Guardian_Name = "guardian_name"
@@ -58,39 +71,50 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
     val emergency_contactNumber = "edt_emergency_contactNumber"
     var userid: String? = ""
     var rollid: String? = ""
-
+    var type: Boolean? = false
+    var stateid: String? = ""
+    var locationid: String?=""
+    var profileimage: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_worker_information)
 
-        genderList.add("Male")
-        genderList.add("Female")
-        bloodgroup.add("A+")
-        bloodgroup.add("A-")
-        bloodgroup.add("B+")
-        bloodgroup.add("B-")
-        bloodgroup.add("o+")
-        bloodgroup.add("o-")
-        bloodgroup.add("AB+")
-        bloodgroup.add("AB-")
-
-        val sharedPreferences: SharedPreferences =getSharedPreferences("myPref", Context.MODE_PRIVATE)!!
-        rollid = sharedPreferences.getString("rollid", "")!!
-        userid = sharedPreferences.getString("userid", "")!!
-
-
+        addlists()
+        callstatedApi()
+        val sharedPreferences: SharedPreferences =getSharedPreferences("workerPref", Context.MODE_PRIVATE)!!
+        type = sharedPreferences.getBoolean("edit", false)!!
+        if(type == true){
+            getworkerdetails()
+        }
         initilize()
+
     }
 
+
+
     private fun initilize() {
+
         tv_next_one.setOnClickListener {
-            //val intent = Intent(applicationContext, WorkerInformationNext1Activity::class.java)
-            //startActivity(intent)
             validateall()
         }
+        iv_profile_image.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "*/*"
+            startActivityForResult(intent, 101)
+        }
+       // cleareditTexts()
+        sp_state.setOnClickListener{
+            val adapter = ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, stateList)
+            sp_state.setAdapter(adapter)
+        }
 
-        callstatedApi()
+        sp_location.setOnClickListener{
+            val adapter2 = ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, locationList)
+            sp_location.setAdapter(adapter2)
+        }
 
         val adapter = ArrayAdapter(this,
             android.R.layout.simple_list_item_1, stateList)
@@ -107,6 +131,22 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
         val adapter4 = ArrayAdapter(this,
             android.R.layout.simple_list_item_1, bloodgroup)
         sp_blood_group.setAdapter(adapter4)
+    }
+
+    private fun cleareditTexts() {
+        //edt_employee_name.text.clear()
+        edt_guardian_name.text.toString()
+        edt_dob.text.toString()
+        sp_gender.text.toString()
+        edt_phone_number.text.toString()
+        edt_emergency_contact_Name.text.toString()
+        nationality.text.toString()
+        sp_blood_group.text.toString()
+        edt_address.text.toString()
+        sp_state.text.toString()
+        sp_location.text.toString()
+        edt_pincode.text.toString()
+        edt_emergency_contactNumber.text.toString()
     }
 
     private fun validateall() {
@@ -126,25 +166,86 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
         val edt_pincode: String = edt_pincode.text.toString()
         val edt_emergency_contactNumber: String = edt_emergency_contactNumber.text.toString()
 
-        val sharedPreferences: SharedPreferences =getSharedPreferences("WorkerInfoPref", Context.MODE_PRIVATE)!!
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        editor.putString(Emp_Name, edt_employee_name)
-        editor.putString(Guardian_Name, edt_guardian_name)
-        editor.putString(Dob, edt_dob)
-        editor.putString(Gender, sp_gender)
-        editor.putString(PhoneNumber, edt_phone_number)
-        editor.putString(emergency_number, edt_emergency_contact_Name)
-        editor.putString(Nationality, nationality)
-        editor.putString(Blood_group, sp_blood_group)
-        editor.putString(Address, edt_address)
-        editor.putString(State, sp_state)
-        editor.putString(Location, sp_location)
-        editor.putString(Pincode, edt_pincode)
-        editor.putString(emergency_contactNumber, edt_emergency_contactNumber)
-        editor.commit()
+        if (!TextUtils.isEmpty(edt_employee_name)) {
+            if (!TextUtils.isEmpty(edt_guardian_name)) {
+                if (!TextUtils.isEmpty(edt_guardian_name)) {
+                    if (!TextUtils.isEmpty(sp_gender)) {
+                        if (!TextUtils.isEmpty(edt_phone_number)) {
+                            if (!TextUtils.isEmpty(edt_emergency_contact_Name)) {
+                                if (!TextUtils.isEmpty(nationality)) {
+                                    if (!TextUtils.isEmpty(edt_address)) {
+                                        if (!TextUtils.isEmpty(edt_employee_name)) {
+                                            if (!TextUtils.isEmpty(edt_employee_name)) {
+                                                if (!TextUtils.isEmpty(edt_emergency_contactNumber)) {
+                                                    val sharedPreferences: SharedPreferences =getSharedPreferences("WorkerInfoPref", Context.MODE_PRIVATE)!!
+                                                    val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                                                    editor.putString(Emp_Name, edt_employee_name)
+                                                    editor.putString(Guardian_Name, edt_guardian_name)
+                                                    editor.putString(Dob, edt_dob)
+                                                    editor.putString(Gender, sp_gender)
+                                                    editor.putString(PhoneNumber, edt_phone_number)
+                                                    editor.putString(emergency_number, edt_emergency_contact_Name)
+                                                    editor.putString(Nationality, nationality)
+                                                    editor.putString(Blood_group, sp_blood_group)
+                                                    editor.putString(Address, edt_address)
+                                                    editor.putString(State, statemap.get(sp_state))
+                                                    editor.putString(Location, locationmap.get(sp_location))
+                                                    editor.putString(Pincode, edt_pincode)
+                                                    editor.putString(emergency_contactNumber, edt_emergency_contactNumber)
+                                                    editor.putString("profile",profileimage)
+                                                    editor.commit()
 
-        val intent = Intent(applicationContext, WorkerInformationNext1Activity::class.java)
-        startActivity(intent)
+                                                    val intent = Intent(applicationContext, WorkerInformationNext1Activity::class.java)
+                                                    startActivity(intent)
+                                                } else {
+                                                    Toast.makeText(this, "please enter emergency contact number", Toast.LENGTH_SHORT)
+                                                        .show()
+                                                }
+                                            } else {
+                                                Toast.makeText(this, "please select location", Toast.LENGTH_SHORT)
+                                                    .show()
+                                            }
+                                        } else {
+                                            Toast.makeText(this, "please select state", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+
+                                    } else {
+                                        Toast.makeText(this, "please enter address", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                } else {
+                                    Toast.makeText(this, "please enter nationality", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+
+                            } else {
+                                Toast.makeText(this, "please enter emergency contact name", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        } else {
+                            Toast.makeText(this, "please valid Phone number", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                    } else {
+                        Toast.makeText(this, "please select gender", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                } else {
+                    Toast.makeText(this, "please enter Date of birth", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            } else {
+                Toast.makeText(this, "please enter guardian name", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        } else {
+            Toast.makeText(this, "please enter employee name", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     private fun callstatedApi() {
@@ -153,18 +254,71 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
 
         val webServices2 = WebServices<Any>(this@WorkerInformationActivity)
         webServices2.location(WebServices.ApiType.location)
-        /*progressDialog = ProgressDialog(this@WorkerInformationActivity)
-        if (progressDialog != null) {
-            if (progressDialog!!.isShowing) {
-                progressDialog?.setCancelable(false)
-                progressDialog?.setMessage("Please wait...")
-                progressDialog?.show()
-                val webServices = WebServices<Any>(this@WorkerInformationActivity)
-                webServices.states(WebServices.ApiType.states)
-            } else {
+    }
 
+    private fun getworkerdetails() {
+        val sharedPreferences: SharedPreferences =getSharedPreferences("updateworker", Context.MODE_PRIVATE)!!
+        val test = sharedPreferences.getString("Emp_Name", "")
+        edt_employee_name.setText(test)!!
+        edt_guardian_name.setText(sharedPreferences.getString("Guardian_Name", ""))!!
+        edt_dob.setText(sharedPreferences.getString("Dob", "")!!)
+        sp_gender.setText( sharedPreferences.getString("Gender", ""))!!
+        edt_phone_number.setText( sharedPreferences.getString("PhoneNumber", ""))!!
+        edt_emergency_contactNumber.setText( sharedPreferences.getString("emergency_contactNumber", ""))!!
+        sp_blood_group.setText( sharedPreferences.getString("Blood_group", ""))!!
+        edt_address.setText( sharedPreferences.getString("Address", ""))!!
+        stateid = sharedPreferences.getString("State", "")
+        nationality.setText(sharedPreferences.getString("Nationality",""))
+        locationid = sharedPreferences.getString("Location", "")
+        edt_pincode.setText(sharedPreferences.getString("pincode", ""))!!
+        edt_emergency_contact_Name.setText(sharedPreferences.getString("emergency_contact_name",""))
+        profileimage = sharedPreferences.getString("profile","")
+        if(profileimage != "") {
+            val base64String = profileimage
+          //  val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            //val bitmap = BitmapFactory.decodeStream(ByteArrayInputStream(decodedBytes))
+            //iv_profile_image.setImageBitmap(bitmap)
+        }
+
+    }
+    private fun addlists() {
+        genderList.add("Male")
+        genderList.add("Female")
+        bloodgroup.add("A+")
+        bloodgroup.add("A-")
+        bloodgroup.add("B+")
+        bloodgroup.add("B-")
+        bloodgroup.add("o+")
+        bloodgroup.add("o-")
+        bloodgroup.add("AB+")
+        bloodgroup.add("AB-")
+
+        val sharedPreferences: SharedPreferences =getSharedPreferences("myPref", Context.MODE_PRIVATE)!!
+        rollid = sharedPreferences.getString("rollid", "")!!
+        userid = sharedPreferences.getString("userid", "")!!
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                val imageUri: Uri = uri
+                val inputStream = contentResolver.openInputStream(imageUri)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                iv_profile_image.setImageBitmap(bitmap)
+                profileimage = convertImageUriToBase64(contentResolver, imageUri)
             }
-        }*/
+        }
+    }
+
+    fun convertImageUriToBase64(contentResolver: ContentResolver, imageUri: Uri): String {
+        val inputStream = contentResolver.openInputStream(imageUri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val imageBytes = byteArrayOutputStream.toByteArray()
+        return android.util.Base64.encodeToString(imageBytes, android.util.Base64.DEFAULT)
     }
 
     override fun onResponse(
@@ -185,9 +339,12 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
                     if (statesResponseItem?.isEmpty() == false) {
                         for (x in statesResponseItem) {
                             stateList.add(x.state_name)
+                            statemap.put(x.state_name,x.id)
+                            statemapreverse.put(x.id,x.state_name)
                         }
+                        sp_state.setText(statemapreverse.get(stateid))!!
                     } else {
-                        Toast.makeText(this, "Please enter valid credentials", Toast.LENGTH_SHORT)
+                        Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT)
                             .show()
                     }
                 } else {
@@ -206,7 +363,10 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
                     if (LocationResponse?.isEmpty() == false) {
                         for (x in LocationResponse) {
                             locationList.add(x.city_name)
+                            locationmap.put(x.city_name,x.city_id)
+                            locationmapreverse.put(x.city_id,x.city_name)
                         }
+                        sp_location.setText(locationmapreverse.get(locationid))!!
                     } else {
                         Toast.makeText(this, "Please enter valid credentials", Toast.LENGTH_SHORT)
                             .show()

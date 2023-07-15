@@ -11,9 +11,6 @@ import com.proteam.renew.R
 
 class AttendenceApproveListAdapter: RecyclerView.Adapter<AttendenceApproveListAdapter.MyViewHolder>()  {
 
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         TODO("Not yet implemented")
         val view =  LayoutInflater.from(parent.context).inflate(R.layout.layout_attendence_approval,parent,false)

@@ -141,6 +141,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_driving_lic"
                         android:layout_width="match_parent"
                         android:background="@drawable/spinner_background"
                         android:layout_marginTop="10dp"

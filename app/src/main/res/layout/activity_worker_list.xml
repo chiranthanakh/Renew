@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="50dp"
         android:background="@color/demo_state_foreground_color"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/ubuntu_bold"
+                    android:fontFamily="@font/proxima_nova_bold"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="Worker List"
@@ -40,26 +40,35 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_filter"
+
+        <TextView
             android:layout_width="wrap_content"
-            android:padding="15dp"
-            android:layout_marginEnd="10dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="?selectableItemBackground"
-            android:src="@drawable/ic_filter"
-            app:tint="@color/white" />
+            android:text="ADD NEW"
+            android:gravity="center"
+            android:fontFamily="@font/proxima_nova_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
 
         <ImageView
             android:id="@+id/iv_Add_NewWorker"
             android:layout_width="wrap_content"
-            android:padding="15dp"
-            android:layout_marginEnd="5dp"
+            android:padding="14dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:background="?selectableItemBackground"
             android:src="@drawable/ic_add_worker_new"
+            app:tint="@color/white" />
+
+        <ImageView
+
+            android:layout_width="wrap_content"
+            android:padding="12dp"
+            android:layout_marginEnd="5dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_filter"
             app:tint="@color/white" />
 
     </LinearLayout>
@@ -80,74 +89,97 @@
             android:orientation="horizontal"
             android:weightSum="6">
 
-            <TextView
+            <LinearLayout
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:visibility="visible"
-                android:text="Status"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="6">
 
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="status"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
 
+                <TextView
+                    android:layout_marginStart="2dp"
+                    android:id="@+id/tv_approval"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text="Approval Status"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Approval Status"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="DOJ"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Name"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="ID"
-                android:paddingRight="5dp"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_doj"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="DOJ"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Action"
-                android:paddingRight="5dp"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Name"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
 
+                <TextView
+                    android:id="@+id/tv_id"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="ID"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_edit"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="Action"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -160,14 +192,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_worker_liat"
+                    android:id="@+id/rv_worker_list"
                     android:layout_width="match_parent"
+                    android:paddingBottom="120dp"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
-
     </LinearLayout>
 
     <RelativeLayout
@@ -175,23 +206,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp_5"
         android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/tv_worker_list_approve"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/btn_bg"
-            android:fontFamily="@font/openssans"
-            android:gravity="center"
-            android:text="Approve"
-            android:textAllCaps="false"
-            android:textColor="#fff"
-            android:textSize="17sp"
-            android:textStyle="bold" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

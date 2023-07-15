@@ -89,10 +89,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, OnResponseListe
 
                 if (edt_email!!.text.toString() != "") {
                     if (edt_pass!!.text.toString() != "") {
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                       // callLoginapi()
+                        //val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        //startActivity(intent)
+                        //finish()
+                        callLoginapi()
                     } else {
                         Toast.makeText(this@LoginActivity, "Enter your password", Toast.LENGTH_LONG)
                             .show()
