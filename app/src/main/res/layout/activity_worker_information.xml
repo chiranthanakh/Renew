@@ -183,7 +183,12 @@
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
-                                android:textSize="@dimen/text_size_14sp" />
+                                android:textSize="@dimen/text_size_14sp"
+
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"/>
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

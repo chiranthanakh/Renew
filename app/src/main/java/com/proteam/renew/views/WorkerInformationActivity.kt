@@ -1,6 +1,7 @@
 package com.proteam.renew.views
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.content.ContentResolver
 import android.content.Context
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
@@ -18,15 +20,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.proteam.renew.R
-import android.util.Base64
 import com.proteam.renew.responseModel.LocationResponse
 import com.proteam.renew.responseModel.statesResponse
 import com.proteam.renew.utilitys.OnResponseListener
 import com.proteam.renew.utilitys.WebServices
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
 
 class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
 
@@ -89,6 +92,32 @@ class WorkerInformationActivity : AppCompatActivity(), OnResponseListener<Any> {
         }
         initilize()
 
+
+        edt_dob.setOnClickListener(View.OnClickListener
+        {
+            datePicker_diaog()
+        })
+
+    }
+
+
+    private fun datePicker_diaog()
+    {
+        val newCalendar: Calendar = Calendar.getInstance()
+        val mDatePicker = DatePickerDialog(this,
+            { view, year, monthOfYear, dayOfMonth ->
+                val newDate: Calendar = Calendar.getInstance()
+                newDate.set(year, monthOfYear, dayOfMonth)
+                val myFormat = "dd-MM-yyyy" //In which you need put here
+                val sdf = SimpleDateFormat(myFormat, Locale.ENGLISH)
+                edt_dob.setText(sdf.format(newDate.getTime()))
+            },
+            newCalendar.get(Calendar.YEAR),
+            newCalendar.get(Calendar.MONTH),
+            newCalendar.get(Calendar.DAY_OF_MONTH)
+        )
+        mDatePicker.datePicker.maxDate = System.currentTimeMillis()
+        mDatePicker.show()
     }
 
 

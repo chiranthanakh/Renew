@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.ll_id_scan:
-               // Intent intentScan= new Intent(MainActivity.this, ScanIdActivity.class);
-               // startActivity(intentScan);
+                Intent intentScan= new Intent(MainActivity.this, ScanIdActivity.class);
+                startActivity(intentScan);
                 break;
             case R.id.ll_approvals:
                 Intent intentapprovals= new Intent(MainActivity.this, ApprovalsActivity.class);
