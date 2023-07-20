@@ -1,7 +1,9 @@
 package com.proteam.renew.views
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -22,6 +24,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, OnResponseListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        val sharedPreferences2: SharedPreferences =getSharedPreferences("myPref", Context.MODE_PRIVATE)!!
+        val  rollid = sharedPreferences2.getString("rollid", "")!!
+
+        if(rollid != ""){
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         btn_continue = findViewById(R.id.btn_continue)
         edt_pass = findViewById(R.id.et_password)
         edt_email = findViewById(R.id.et_user_name)
@@ -86,12 +97,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, OnResponseListe
     override fun onClick(view: View) {
         when (view.id) {
             R.id.btn_continue ->
-
                 if (edt_email!!.text.toString() != "") {
                     if (edt_pass!!.text.toString() != "") {
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
                         callLoginapi()
                     } else {
                         Toast.makeText(this@LoginActivity, "Enter your password", Toast.LENGTH_LONG)

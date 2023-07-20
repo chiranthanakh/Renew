@@ -2,12 +2,16 @@ package com.proteam.renew.utilitys;
 
 import com.proteam.renew.Adapter.ApprovalRequest;
 import com.proteam.renew.Adapter.RejectRequest;
+import com.proteam.renew.requestModels.AttendanceRequest;
 import com.proteam.renew.requestModels.Loginmodel;
 import com.proteam.renew.requestModels.OnBoarding;
+import com.proteam.renew.responseModel.AttendenceListResponsce;
 import com.proteam.renew.responseModel.ContractorListResponsce;
+import com.proteam.renew.responseModel.EmployeedetailResponsce;
 import com.proteam.renew.responseModel.LocationResponse;
 import com.proteam.renew.responseModel.LoginResponse;
 import com.proteam.renew.responseModel.SupervisorListResponsce;
+import com.proteam.renew.responseModel.ViewActivityMasterResponsce;
 import com.proteam.renew.responseModel.ViewProjectMaster;
 import com.proteam.renew.responseModel.ViewProjectMasterItem;
 import com.proteam.renew.responseModel.ViewSkillsetMaster;
@@ -60,7 +64,7 @@ public interface renewNetwork {
     Call<Boolean> onBoarding(@Body OnBoarding onBording);
 
     @PUT("updateWorker/{id}")
-    Call<Boolean> update(@Body OnBoarding onBording,  @Path("id") String id);
+    Call<generalGesponce> update(@Body OnBoarding onBording,  @Path("id") String id);
 
     @POST("approve_employee")
     Call<generalGesponce> approve(@Body ApprovalRequest onapprove);
@@ -68,4 +72,16 @@ public interface renewNetwork {
     @POST("reject_employee")
     Call<Boolean> reject(@Body RejectRequest onapprove);
 
-   }
+    @GET("viewActivityMaster")
+    Call<ViewActivityMasterResponsce> activityList();
+
+    @POST("attendance_insert")
+    Call<generalGesponce> attendencepass(@Body AttendanceRequest attendanceRequest);
+
+    @GET("list_attendance/")
+    Call<AttendenceListResponsce> attendance_list(@Query("user_id") String user_id);
+
+    @GET("employeeDetails")
+    Call<EmployeedetailResponsce> empdetails(@Query("employee") String user_id);
+
+}

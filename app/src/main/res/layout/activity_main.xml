@@ -114,6 +114,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_add_newWorker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -144,7 +145,6 @@
                                 app:tint="@color/demo_state_foreground_color" />
 
                         <LinearLayout
-                            android:id="@+id/ll_add_newWorker"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -180,6 +180,7 @@
             android:background="@color/demo_state_second" />
 
         <LinearLayout
+            android:id="@+id/ll_id_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -187,8 +188,6 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:orientation="vertical">
-
-
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -213,7 +212,6 @@
                                 app:tint="@color/demo_state_foreground_color" />
 
                         <LinearLayout
-                            android:id="@+id/ll_id_scan"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -249,6 +247,7 @@
             android:background="@color/demo_state_second" />
 
         <LinearLayout
+            android:id="@+id/ll_approvals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -282,7 +281,6 @@
 
 
                         <LinearLayout
-                            android:id="@+id/ll_approvals"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"

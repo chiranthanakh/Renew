@@ -79,6 +79,10 @@
                     android:paddingEnd="10dp"
                     android:paddingBottom="10dp">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                     <ImageView
                         android:layout_marginTop="20dp"
@@ -89,7 +93,14 @@
                         android:adjustViewBounds="true"
                         android:src="@drawable/ic_user_new" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:text="Profile Image"
+                            android:gravity="center"
+                            android:textSize="@dimen/dp_10"/>
 
+                    </LinearLayout>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -112,7 +123,7 @@
                                 android:id="@+id/edt_employee_name"
                                 android:layout_height="50dp"
                                 android:background="@null"
-                                android:hint="Name of the Employee*"
+                                android:hint="@string/name"
                                 android:inputType="text"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
@@ -177,14 +188,13 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_dob"
-                                android:hint="Date of Birth (DD-MM-YYYY)*"
+                                android:hint="@string/dob"
                                 android:inputType="text"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
                                 android:textSize="@dimen/text_size_14sp"
-
                                 android:clickable="false"
                                 android:cursorVisible="false"
                                 android:focusable="false"
@@ -197,7 +207,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Gender">
+                        android:hint="@string/gender">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -231,8 +241,8 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_phone_number"
-                                android:hint="Worker Phone Number"
-                                android:inputType="text"
+                                android:hint="@string/phone"
+                                android:inputType="number"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
@@ -263,7 +273,7 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_emergency_contact_Name"
-                                android:hint="Emergency Contact Name"
+                                android:hint="@string/emergency_name"
                                 android:inputType="text"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
@@ -295,8 +305,8 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_emergency_contactNumber"
-                                android:hint="Emergency Contact Number"
-                                android:inputType="text"
+                                android:hint="@string/emergency_contact"
+                                android:inputType="number"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
@@ -326,10 +336,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
                                 android:background="@null"
-                                android:hint="Nationality"
+                                android:hint="@string/nationality"
                                 android:id="@+id/nationality"
                                 android:inputType="text"
                                 android:lines="4"
+                                android:text="Indian"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
@@ -376,7 +387,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="80dp"
                                 android:background="@null"
-                                android:hint="Address"
+                                android:hint="@string/address"
                                 android:id="@+id/edt_address"
                                 android:inputType="text"
                                 android:lines="4"
@@ -392,7 +403,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="State">
+                        android:hint="@string/state">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -409,7 +420,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Location">
+                        android:hint="@string/locatioon">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -444,7 +455,7 @@
                                 android:background="@null"
                                 android:id="@+id/edt_pincode"
                                 android:hint="Pin Code"
-                                android:inputType="text"
+                                android:inputType="number"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
@@ -459,6 +470,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginBottom="80dp"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -499,7 +511,22 @@
             </LinearLayout>
         </ScrollView>
 
-
     </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottomNavShift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/demo_state_foreground_color"
+        app:itemIconTint="@color/white"
+        app:itemRippleColor="@color/demo_state_second"
+        app:itemIconSize="30dp"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/menu_items">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
