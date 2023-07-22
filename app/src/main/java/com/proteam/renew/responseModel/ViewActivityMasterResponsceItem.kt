@@ -1,6 +1,6 @@
 package com.proteam.renew.responseModel
 
-data class ViewActivityMasterItem(
+data class ViewActivityMasterResponsceItem(
     val activity_code: String,
     val activity_id: String,
     val activity_name: String,

@@ -71,6 +71,8 @@
                 android:layout_gravity="center"
                 android:id="@+id/ch_approve_all"
                 android:layout_width="360dp"
+                android:text="All"
+                android:textColor="@color/white"
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
 
@@ -131,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_worker_liat"
+                    android:id="@+id/rv_attendance"
                     android:paddingBottom="120dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -139,8 +141,8 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-
     </LinearLayout>
+
 
 
     <RelativeLayout
@@ -151,7 +153,7 @@
         android:gravity="center_horizontal">
 
         <TextView
-            android:id="@+id/tv_worker_attendance_approve"
+            android:id="@+id/tv_attendance_approve"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
@@ -166,6 +168,23 @@
             android:textSize="17sp"
             android:textStyle="bold" />
     </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottomNavShift"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:background="@color/demo_state_foreground_color"
+        app:itemIconTint="@color/white"
+        app:itemRippleColor="@color/demo_state_second"
+        app:itemIconSize="30dp"
+        android:visibility="gone"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:menu="@menu/menu_items">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

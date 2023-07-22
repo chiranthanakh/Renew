@@ -1,4 +1,4 @@
-package com.proteam.renew.Adapter
+package com.proteam.renew.requestModels
 
 data class RejectRequest(
     val employee_id: String,

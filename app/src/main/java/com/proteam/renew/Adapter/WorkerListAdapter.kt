@@ -1,5 +1,6 @@
 package com.proteam.renew.Adapter
 
+import android.content.ClipData.Item
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -47,6 +48,7 @@ class WorkerListAdapter(
             holder.active.text = "Active"
         }else if(ItemsViewModel.state == "2"){
             holder.active.text = "Inactive"
+            holder.active.setBackgroundResource(R.drawable.btn_bg_orange)
         }
 
         if(ItemsViewModel.approval_status == "1"){
@@ -75,7 +77,7 @@ class WorkerListAdapter(
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putBoolean("edit",true)
             editor.putString("Emp_Name", ItemsViewModel.full_name)
-            editor.putString("Guardian_Name", ItemsViewModel.father_name)
+            editor.putString("guardian_name", ItemsViewModel.father_name)
             editor.putString("Dob", ItemsViewModel.dob)
             editor.putString("Gender", ItemsViewModel.gender)
             editor.putString("PhoneNumber", ItemsViewModel.mobile_no)
@@ -96,11 +98,22 @@ class WorkerListAdapter(
             editor.putString("sub_contractor", ItemsViewModel.subcontractor_name)
             editor.putString("contractor_contact_number", ItemsViewModel.subcontract_contract_no)
             editor.putString("induction_status", ItemsViewModel.induction_status)
-            editor.putString("aadhaar_card", ItemsViewModel.aadhaar_card)
+            editor.putString("inductiondate", ItemsViewModel.induction_date)
+
+            editor.putString("aadhaar_card", ItemsViewModel.aadhaar_no)
             editor.putString("medical_test_status", ItemsViewModel.medical_test_status)
+            editor.putString("medical_test_date", ItemsViewModel.medical_test_date)
             editor.putString("report_is_ok", ItemsViewModel.report_is_ok)
             editor.putString("profile",ItemsViewModel.profilepic)
             editor.putString("workerid",ItemsViewModel.worker_id)
+            editor.putString("exp_years", ItemsViewModel.exp_year)
+            editor.putString("exp_months",ItemsViewModel.exp_month)
+            editor.putString("drivinglic",ItemsViewModel.driving_license_no)
+            editor.putString("licence_exp","")
+            editor.putString("drivinglicpic",ItemsViewModel.driving_lisence_docs)
+            editor.putString("aadharpic",ItemsViewModel.aadhaar_card)
+            editor.putString("medicalpic", ItemsViewModel.medical_certificate)
+            editor.putString("approvalstatus",ItemsViewModel.approval_status)
             editor.commit()
 
             if(value){
@@ -113,7 +126,6 @@ class WorkerListAdapter(
                 applicationContext.startActivity(intent)
             }
         }
-
     }
 
     class MyViewHolder (view: View): RecyclerView.ViewHolder(view){

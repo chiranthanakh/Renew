@@ -1,4 +1,4 @@
-package com.proteam.renew.Adapter
+package com.proteam.renew.requestModels
 
 data class ApprovalRequest(
     val employee_id: String,

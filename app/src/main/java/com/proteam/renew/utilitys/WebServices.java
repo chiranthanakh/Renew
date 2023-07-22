@@ -4,15 +4,19 @@ package com.proteam.renew.utilitys;
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Context;
-import android.util.Log;
 import android.widget.Adapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.proteam.renew.Adapter.ApprovalRequest;
-import com.proteam.renew.Adapter.RejectRequest;
+import com.proteam.renew.requestModels.ApprovalRequest;
+import com.proteam.renew.requestModels.RejectRequest;
+import com.proteam.renew.requestModels.AttendancApproveRequest;
+import com.proteam.renew.requestModels.AttendanceRequest;
 import com.proteam.renew.requestModels.Loginmodel;
 import com.proteam.renew.requestModels.OnBoarding;
+import com.proteam.renew.requestModels.TrainingAllocationRequest;
+import com.proteam.renew.requestModels.TrainingListResponsce;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +49,8 @@ public class WebServices<T> {
     private static OkHttpClient.Builder builder;
 
     public enum ApiType {
-       login,states,location,workers,training,skills,projects,activitys,onBoarding,contractors,supervisors,update,approve,reject
+       login,states,location,workers,training,skills,projects,activitys,onBoarding,trainingAllocate,
+        contractors,supervisors,update,approve,reject,attendence, attendancelist,empdetails,attendanceapprove, traininglist
     }
     String BaseUrl = "https://gp.proteam.co.in/api/Workeronboard_api/";
 
@@ -262,7 +267,7 @@ public class WebServices<T> {
         Retrofit retrofit=getRetrofitClient(BaseUrl);
         renewNetwork proRenew=retrofit.create(renewNetwork.class);
 
-        call=(Call<T>)proRenew.skillslist();
+        call=(Call<T>)proRenew.activityList();
 
         call.enqueue(new Callback<T>() {
             @Override
@@ -307,7 +312,6 @@ public class WebServices<T> {
         apiTypeVariable = apiTypes;
         Retrofit retrofit=getRetrofitClient(BaseUrl);
         renewNetwork proRenew=retrofit.create(renewNetwork.class);
-
         call=(Call<T>)proRenew.contractors(user_id);
 
         call.enqueue(new Callback<T>() {
@@ -435,5 +439,140 @@ public class WebServices<T> {
             }
         });
     }
+
+    public void attendance(ApiType apiTypes, AttendanceRequest attendanceRequest)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+
+        call=(Call<T>)proRenew.attendencepass(attendanceRequest);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    //// attendance apis
+
+    public void attendance_list(ApiType apiTypes, String user_id)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.attendance_list(user_id);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void empdetails(ApiType apiTypes, String id)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.empdetails(id);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void AttendanceApprove(ApiType apiTypes, AttendancApproveRequest request)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.attendanceapprove(request);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void Traininglist(ApiType apiTypes, String id) {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.training_list(id);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
+    public void trainingAllocation(ApiType apiTypes, TrainingAllocationRequest request)
+    {
+        apiTypeVariable = apiTypes;
+        Retrofit retrofit=getRetrofitClient(BaseUrl);
+        renewNetwork proRenew=retrofit.create(renewNetwork.class);
+        call=(Call<T>)proRenew.trainingaloocate(request);
+
+        call.enqueue(new Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                System.out.println("stateslist===="+response.body());
+                t=(T)response.body();
+                onResponseListner.onResponse(t, apiTypeVariable, true,response.code());
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable t) {
+                onResponseListner.onResponse(null, apiTypeVariable, false,0);
+            }
+        });
+    }
+
 }
 

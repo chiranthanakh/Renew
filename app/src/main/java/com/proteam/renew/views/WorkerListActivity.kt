@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proteam.renew.Adapter.WorkerListAdapter
 import com.proteam.renew.R
 import com.proteam.renew.responseModel.workersListResponsce
@@ -25,6 +26,10 @@ class WorkerListActivity : AppCompatActivity(),OnResponseListener<Any> {
     var progressDialog: ProgressDialog? = null
     val rv_worker_list: RecyclerView by lazy { findViewById(R.id.rv_worker_list) }
     var value: Boolean = false
+    var userid: String = ""
+    var rollid: String = ""
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_worker_list)
@@ -32,7 +37,12 @@ class WorkerListActivity : AppCompatActivity(),OnResponseListener<Any> {
         if (bundle != null) {
              value = bundle.getBoolean("approval")
         }
+        val sharedPreferences: SharedPreferences =getSharedPreferences("myPref", Context.MODE_PRIVATE)!!
+         rollid = sharedPreferences.getString("rollid", "")!!
+         userid = sharedPreferences.getString("userid", "")!!
+        bottomnavigation()
         callLoginapi()
+
 
         rv_worker_list.layoutManager = LinearLayoutManager(this)
         iv_Add_NewWorker.setOnClickListener(View.OnClickListener
@@ -45,6 +55,47 @@ class WorkerListActivity : AppCompatActivity(),OnResponseListener<Any> {
             startActivity(intent)
         })
     }
+
+    private fun bottomnavigation() {
+        bottomNavigationView = findViewById(R.id.bottomNavShift)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intentScan = Intent(this@WorkerListActivity, MainActivity::class.java)
+                    startActivity(intentScan)
+                    finish()
+                    true
+                }
+                R.id.it_scan -> {
+                    if(rollid != "1") {
+                        val intentScan = Intent(this@WorkerListActivity, ScanIdActivity::class.java)
+                        startActivity(intentScan)
+                        finish()
+                    }
+                    true
+                }
+                R.id.it_approve -> {
+                    if(rollid != "1") {
+                        val intentapprovals =
+                            Intent(this@WorkerListActivity, ApprovalsActivity::class.java)
+                        val prefs = getSharedPreferences("onboard", MODE_PRIVATE)
+                        val editor = prefs.edit()
+                        editor.putBoolean("nav", true)
+                        editor.commit()
+                        startActivity(intentapprovals)
+                        finish()
+                    }
+                    // Handle the Profile action
+                    true
+                }
+                R.id.it_worker -> {
+                    // Handle the Profile action
+                    true
+                }
+                else -> false
+            }
+        }    }
+
 
     private fun callLoginapi() {
         progressDialog = ProgressDialog(this@WorkerListActivity)
@@ -78,10 +129,13 @@ class WorkerListActivity : AppCompatActivity(),OnResponseListener<Any> {
                         for (x in workerslist) {
                             if(value){
                                 if(x.approval_status == "0"){
+                                    if(x.user_id == userid){
+                                        contractorList.add(x)
+                                    }                                }
+                            }else{
+                                if(x.user_id == userid){
                                     contractorList.add(x)
                                 }
-                            }else{
-                                contractorList.add(x)
                             }
                         }
                         val adapter = WorkerListAdapter(contractorList, getApplicationContext(),value)

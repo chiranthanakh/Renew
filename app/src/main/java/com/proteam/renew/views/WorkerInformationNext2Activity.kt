@@ -17,15 +17,15 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import com.proteam.renew.Adapter.ApprovalRequest
-import com.proteam.renew.Adapter.RejectRequest
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.proteam.renew.requestModels.ApprovalRequest
+import com.proteam.renew.requestModels.RejectRequest
 import com.proteam.renew.R
-import com.proteam.renew.requestModels.Loginmodel
 import com.proteam.renew.requestModels.OnBoarding
-import com.proteam.renew.responseModel.LoginResponse
 import com.proteam.renew.responseModel.generalGesponce
 import com.proteam.renew.utilitys.OnResponseListener
 import com.proteam.renew.utilitys.WebServices
+import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 
 class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<Any> {
@@ -41,6 +41,7 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
     val tv_previous_two: TextView by lazy { findViewById<TextView>(R.id.tv_previous_two) }
     val tv_submit: TextView by lazy { findViewById<TextView>(R.id.tv_submit) }
     val ll_driving_lic : LinearLayout by lazy { findViewById(R.id.ll_driving_lic) }
+    val tv_update: TextView by lazy { findViewById((R.id.tv_update)) }
 
     var name: String = ""
     var gaurdian: String = ""
@@ -50,6 +51,7 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
     var phone_number: String = ""
     var nationality: String = ""
     var emergency_number: String = ""
+    var emergency_name: String = ""
     var blood_group: String = ""
     var address: String = ""
     var state: String = ""
@@ -75,8 +77,12 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
     var medicalimage: String = ""
     var drivingimage: String = ""
     var userid: String = ""
+    var rollid: String = ""
     var induction_date = ""
     var workerid = ""
+    var remarks = ""
+    var medical_date = ""
+    private lateinit var bottomNavigationView: BottomNavigationView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,23 +90,53 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
         setContentView(R.layout.activity_worker_information_next2)
 
         getAlldata()
-
         val sharedPreferences: SharedPreferences =getSharedPreferences("workerPref", Context.MODE_PRIVATE)!!
         val type = sharedPreferences.getBoolean("edit", false)!!
         val approval = sharedPreferences.getBoolean("approval",false)
         val workerid = sharedPreferences.getString("workerid","")
 
+        val sharedPreferences1: SharedPreferences =getSharedPreferences("updateworker", Context.MODE_PRIVATE)!!
+         var aadharurl = sharedPreferences1.getString("aadharpic", "")!!
+        var drivingurl = sharedPreferences1.getString("drivinglicpic", "")!!
+        var medicalurl = sharedPreferences1.getString("medicalpic", "")!!
+
+
+        if(type) {
+            if (aadharurl != "") {
+                val url = "https://gp.proteam.co.in/" + aadharurl
+                Picasso.get().load(url).into(select_aadhar_card)
+            }
+            if (drivingurl != "") {
+                val url = "https://gp.proteam.co.in/" + drivingurl
+                Picasso.get().load(url).into(select_driving_licence)
+            }
+            if (medicalurl != "") {
+                val url = "https://gp.proteam.co.in/" + medicalurl
+                Picasso.get().load(url).into(select_medical_certificate)
+            }
+        }
+        bottomnavigation()
         val sharedPreferences2: SharedPreferences =getSharedPreferences("myPref", Context.MODE_PRIVATE)!!
         userid = sharedPreferences2.getString("userid", "")!!
+        rollid = sharedPreferences2.getString("rollid", "")!!
+
 
         if(approval){
-            tv_previous_two.text = "Approve"
-            tv_submit.text = "Reject"
+            tv_previous_two.text = "Reject"
+            tv_submit.text = "Approve"
+        }else{
+
+        }
+        if(type == false && !approval){
+            tv_update.visibility = View.GONE
+        }
+        tv_update.setOnClickListener {
+            callupdateApi(workerid)
         }
 
         tv_previous_two.setOnClickListener {
             if(approval){
-                workerid?.let { it1 -> callaproveapi(it1) }
+                workerid?.let { it1 -> callrejectApi(it1) }
             }else {
                 val intent = Intent(applicationContext, WorkerInformationNext1Activity::class.java)
                 startActivity(intent)
@@ -127,9 +163,7 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
 
         tv_submit.setOnClickListener {
             if(approval){
-                if (workerid != null) {
-                    callrejectApi(workerid)
-                }
+                workerid?.let { it1 -> callaproveapi(it1) }
             } else {
                 if (type == true) {
                     callupdateApi(workerid)
@@ -150,7 +184,7 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
          Dob = sharedPreferences.getString("Dob", "")!!
          gender = sharedPreferences.getString("sp_gender", "")!!
          phone_number = sharedPreferences.getString("phone_number", "")!!
-         emergency_number = sharedPreferences.getString("emergency_number", "")!!
+         emergency_number = sharedPreferences.getString("emergency_contactNumber", "")!!
          blood_group = sharedPreferences.getString("blood_group", "")!!
          address = sharedPreferences.getString("address", "")!!
          nationality = sharedPreferences.getString("nationality","")!!
@@ -158,7 +192,7 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
          location = sharedPreferences.getString("location", "")!!
          pincode = sharedPreferences.getString("pincode", "")!!
          profilepic = sharedPreferences.getString("profile","")!!
-
+         emergency_name = sharedPreferences.getString("emergency_contact_name","")!!
 
         val sharedPreferences2 = getSharedPreferences("WorkerInfoOnePref2", Context.MODE_PRIVATE)
         Project = sharedPreferences2.getString("project", "")!!
@@ -179,6 +213,9 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
         ex_month = sharedPreferences2.getString("exp_months", "")!!
         induction_date = sharedPreferences2.getString("induction_date", "")!!
         workerid = sharedPreferences2.getString("workerid", "")!!
+        remarks = sharedPreferences2.getString("edt_remarks","")!!
+        medical_date = sharedPreferences2.getString("medical_test_date","")!!
+
 
         if(driving_license == ""){
             ll_driving_lic.visibility = View.GONE
@@ -192,7 +229,7 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
                 progressDialog?.setCancelable(false)
                 progressDialog?.setMessage("Please wait...")
                 progressDialog?.show()
-                val approveRequest = ApprovalRequest(workerid, "2023-06-23",induction_status,report_is_ok,userid )
+                val approveRequest = ApprovalRequest(workerid, induction_date,induction_status,report_is_ok,userid )
                 val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
                 webServices.Approve(WebServices.ApiType.approve, approveRequest)
             } else {
@@ -201,31 +238,58 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
     }
 
     private fun callrejectApi(workerid: String) {
-        val rejectrequest = RejectRequest(workerid, "2023-06-23","ok" )
-        val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
-        webServices.Reject(WebServices.ApiType.reject, rejectrequest)
+        progressDialog = ProgressDialog(this@WorkerInformationNext2Activity)
+        if (progressDialog != null) {
+            if (!progressDialog!!.isShowing) {
+                progressDialog?.setCancelable(false)
+                progressDialog?.setMessage("Please wait...")
+                progressDialog?.show()
+                val rejectrequest = RejectRequest(workerid, remarks,userid )
+                val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
+                webServices.Reject(WebServices.ApiType.reject, rejectrequest)
+            } else {
+            }
+        }
     }
 
     private fun callmasterAps() {
-        val onboarding = OnBoarding(
-            adharimage, aadhaar_card, address, blood_group, location, Dob, doj, driving_license,
-            drivingimage, gaurdian, emergency_number, contractor_contact_number, "", "", "", name,
-            gender, induction_date, induction_status, medicalimage, "", medical_test_status, phone_number, nationality,
-            pincode, profilepic, Project, skill_set, skill_type, state, contractor_contact_number, sub_contractor, userid, worker_designation
-        )
-        val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
-        webServices.onBoarding(WebServices.ApiType.onBoarding, onboarding)
+        progressDialog = ProgressDialog(this@WorkerInformationNext2Activity)
+        if (progressDialog != null) {
+            if (!progressDialog!!.isShowing) {
+                progressDialog?.setCancelable(false)
+                progressDialog?.setMessage("Please wait...")
+                progressDialog?.show()
+                val onboarding = OnBoarding(
+                    adharimage, aadhaar_card, address, blood_group, location, Dob, doj, driving_license,
+                    drivingimage, emergency_name, emergency_number, contractor_contact_number, ex_month, ex_year, gaurdian, name,
+                    gender, induction_date, induction_status, medicalimage, medical_date, medical_test_status, phone_number, nationality,
+                    pincode, profilepic, Project, skill_set, skill_type, state, contractor_contact_number, sub_contractor, userid, worker_designation
+                )
+                val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
+                webServices.onBoarding(WebServices.ApiType.onBoarding, onboarding)
+            } else {
+            }
+        }
     }
 
     private fun callupdateApi(workerid: String?) {
-        val onboarding = OnBoarding(
-            adharimage, aadhaar_card, address, blood_group, location, Dob, doj, "ced",
-            drivingimage, gaurdian, emergency_number, contractor_contact_number, "", "", "", name,
-            gender, induction_date, induction_status, medicalimage, "", medical_test_status, phone_number, nationality,
-            pincode, profilepic, Project, skill_set, skill_type, state, contractor_contact_number, sub_contractor, userid, worker_designation
-        )
-        val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
-        webServices.workerUpdate(WebServices.ApiType.update, onboarding,workerid)
+        progressDialog = ProgressDialog(this@WorkerInformationNext2Activity)
+        if (progressDialog != null) {
+            if (!progressDialog!!.isShowing) {
+                progressDialog?.setCancelable(false)
+                progressDialog?.setMessage("Please wait...")
+                progressDialog?.show()
+                val onboarding = OnBoarding(
+                    adharimage, aadhaar_card, address, blood_group, location, Dob, doj, driving_license,
+                    drivingimage, emergency_name, emergency_number, contractor_contact_number, ex_month, ex_month, gaurdian, name,
+                    gender, induction_date, induction_status, medicalimage, medical_date, medical_test_status, phone_number, nationality,
+                    pincode, profilepic, Project, skill_set, skill_type, state, contractor_contact_number, sub_contractor, userid, worker_designation
+                )
+                val webServices = WebServices<Any>(this@WorkerInformationNext2Activity)
+                webServices.workerUpdate(WebServices.ApiType.update, onboarding,workerid)
+            } else {
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -307,6 +371,26 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
                 }
             }
 
+            WebServices.ApiType.update -> {
+                if (progressDialog != null) {
+                    if (progressDialog!!.isShowing) {
+                        progressDialog!!.dismiss()
+                    }
+                }
+                if (isSucces && response != null) {
+                    val gresponse = response as generalGesponce
+                    if (gresponse?.status == "200") {
+                        showSuccessDialog("updated Successfully")
+                    } else {
+                        Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                } else {
+                    Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
             else -> {}
         }
     }
@@ -333,6 +417,51 @@ class WorkerInformationNext2Activity : AppCompatActivity(), OnResponseListener<A
         val dialog = builder.create()
         dialog.show()
     }
+
+    private fun bottomnavigation() {
+        bottomNavigationView = findViewById(R.id.bottomNavShift)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intentScan = Intent(this@WorkerInformationNext2Activity, MainActivity::class.java)
+                    startActivity(intentScan)
+                    finish()
+                    true
+                }
+                R.id.it_scan -> {
+                    if(rollid != "1") {
+                        val intentScan = Intent(this@WorkerInformationNext2Activity, ScanIdActivity::class.java)
+                        startActivity(intentScan)
+                        finish()
+                    }
+                    true
+                }
+                R.id.it_approve -> {
+                    if(rollid != "1") {
+                        val intentapprovals =
+                            Intent(this@WorkerInformationNext2Activity, ApprovalsActivity::class.java)
+                        val prefs = getSharedPreferences("onboard", MODE_PRIVATE)
+                        val editor = prefs.edit()
+                        editor.putBoolean("nav", true)
+                        editor.commit()
+                        startActivity(intentapprovals)
+                        finish()
+                    }
+                    // Handle the Profile action
+                    true
+                }
+                R.id.it_worker -> {
+                    if(rollid != "1") {
+                        val intentScan = Intent(this@WorkerInformationNext2Activity, WorkerListActivity::class.java)
+                        startActivity(intentScan)
+                        finish()
+                    }
+                    true
+                }
+                else -> false
+            }
+        }    }
+
 
     fun showFailureDialog(s: String) {
         val builder = AlertDialog.Builder(this)

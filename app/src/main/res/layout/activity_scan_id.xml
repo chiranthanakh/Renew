@@ -146,6 +146,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
+                            android:inputType="none"
+                            android:cursorVisible="false"
+                            android:editable="false"
                             android:text="Select" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -158,10 +161,13 @@
                         android:hint="Activity">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/activity"
+                            android:id="@+id/sp_activity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
+                            android:inputType="none"
+                            android:cursorVisible="false"
+                            android:editable="false"
                             android:text="Select" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -303,7 +309,7 @@
                                         android:layout_height="@dimen/dp_25"/>
 
                                     <ImageView
-                                        android:id="@+id/select_corosel_image"
+                                        android:id="@+id/img_work_permit"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:adjustViewBounds="true"
@@ -335,7 +341,7 @@
                         android:gravity="center_horizontal">
 
                         <TextView
-                            android:id="@+id/cancel_tv"
+                            android:id="@+id/qr_scan"
                             android:layout_width="150dp"
                             android:layout_height="50dp"
                             android:layout_alignParentBottom="true"
@@ -355,8 +361,24 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
-
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottomNavShift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/demo_state_foreground_color"
+        app:itemIconTint="@color/white"
+        app:itemRippleColor="@color/demo_state_second"
+        app:itemIconSize="30dp"
+        android:visibility="gone"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/menu_items">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

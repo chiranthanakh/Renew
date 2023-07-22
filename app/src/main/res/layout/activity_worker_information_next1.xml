@@ -113,7 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Project">
+                        android:hint="@string/Project">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Skill Type">
+                        android:hint="@string/skill_type">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -147,7 +147,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Skill Set">
+                        android:hint="@string/skill_set"
+                        app:hintTextColor="@color/red">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -163,6 +164,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/top_bar">
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -245,9 +247,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColorHint="@color/black"
                             app:boxStrokeColor="@color/demo_state_foreground_color"
-                            app:hintTextColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:startIconTint="@color/grey_dark">
@@ -257,12 +257,12 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_doj"
-                                android:hint="DOJ"
-                                android:inputType="text"
+                                android:hint="@string/doj"
+                                android:cursorVisible="false"
+                                android:editable="false"
+                                android:inputType="none"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/black"
                                 android:textSize="@dimen/text_size_14sp" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -272,7 +272,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Supervisor Name(Renew)">
+                        android:hint="@string/supervisor"
+                        app:hintTextColor="@color/red">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -289,7 +290,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Sub Contractor/ Firm Name">
+                        android:hint="@string/contractor"
+                        app:hintTextColor="@color/red">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -323,8 +325,8 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_contractor_contact_number"
-                                android:hint="Contractor Contact Number"
-                                android:inputType="text"
+                                android:hint="@string/contractor_num"
+                                android:inputType="number"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
                                 android:textColor="@color/black"
@@ -339,7 +341,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint=" Status">
+                        android:hint="@string/status">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -425,7 +427,7 @@
                                 android:layout_height="50dp"
                                 android:background="@null"
                                 android:id="@+id/edt_driving_licence"
-                                android:hint="Driving licence no"
+                                android:hint="@string/driving"
                                 android:inputType="text"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
@@ -435,9 +437,8 @@
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/con_induction_date"
+                        android:id="@+id/con_licence_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -458,11 +459,99 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
                                 android:background="@null"
-                                android:id="@+id/edt_induction_date"
-                                android:hint="Induction date"
+                                android:id="@+id/edt_licence_expire"
+                                android:hint="Driving licence expire date"
+                                android:inputType="none"
+                                android:lines="4"
+                                android:editable="false"
+                                android:cursorVisible="false"
+                                android:padding="@dimen/dp_0"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/black"
+                                android:textSize="@dimen/text_size_14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/top_bar">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/black"
+                            app:boxStrokeColor="@color/demo_state_foreground_color"
+                            app:hintTextColor="@color/black"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:startIconTint="@color/grey_dark">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:background="@null"
+                                android:id="@+id/edt_aadhaar_card"
+                                android:hint="@string/aadhar"
+                                android:inputType="number"
+                                android:lines="4"
+                                android:padding="@dimen/dp_0"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/black"
+                                android:textSize="@dimen/text_size_14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_medical_status"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/medical_states">
+
+                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sp_medical_test_status"
+                            android:singleLine="true"
+                            android:editable="false"
+                            android:text="Select" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/con_medical_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/top_bar">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="@color/black"
+                            app:boxStrokeColor="@color/demo_state_foreground_color"
+                            app:hintTextColor="@color/black"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:startIconTint="@color/grey_dark">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:background="@null"
+                                android:id="@+id/edt_medical_date"
+                                android:hint="@string/medical_date"
                                 android:inputType="text"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
+                                android:cursorVisible="false"
+                                android:editable="false"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
                                 android:textSize="@dimen/text_size_14sp" />
@@ -489,6 +578,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/con_induction_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -509,34 +599,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
                                 android:background="@null"
-                                android:id="@+id/edt_aadhaar_card"
-                                android:hint="Aadhaar Card"
-                                android:inputType="text"
+                                android:id="@+id/edt_induction_date"
+                                android:hint="@string/induction_date"
+                                android:inputType="none"
                                 android:lines="4"
                                 android:padding="@dimen/dp_0"
+                                android:cursorVisible="false"
+                                android:editable="false"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
                                 android:textSize="@dimen/text_size_14sp" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_medical_status"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="Medical test status">
-
-                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/sp_medical_test_status"
-                            android:singleLine="true"
-                            android:editable="false"
-                            android:text="Select" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_report_ok"
@@ -544,7 +619,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="Medical Report is Ok">
+                        android:hint="@string/report">
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:layout_width="match_parent"
@@ -560,6 +635,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/margin_80dp"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -599,9 +675,23 @@
 
                 </LinearLayout>
             </LinearLayout>
+
         </ScrollView>
-
-
     </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottomNavShift"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:background="@color/demo_state_foreground_color"
+        app:itemIconTint="@color/white"
+        app:itemRippleColor="@color/demo_state_second"
+        app:itemIconSize="30dp"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:menu="@menu/menu_items">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
